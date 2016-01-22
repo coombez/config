@@ -13,6 +13,9 @@
  )
 
 (require 'cl)
+
+;; not certain what's special about this package that it can't be required without extra work
+(load-file ".emacs.d/elpa/framemove-20130328.433/framemove.el")
 (require 'framemove)
 (global-set-key (kbd "C-c f") #'windmove-right)
 (global-set-key (kbd "C-c b") #'windmove-left)
@@ -65,5 +68,8 @@
 (require 'magit)
 (global-set-key (kbd "C-c g") #'magit-status)
 
+;; not certain what's special about this package that it can't be required without extra work
+(load-file ".emacs.d/elpa/magit-gerrit-20160111.1848/magit-gerrit.el")
+(require 'magit-gerrit)
 ;;(setq-default show-trailing-whitespace t)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)

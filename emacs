@@ -99,7 +99,8 @@
  ;; If there is more than one, they won't work right.
  )
 
-(setq rcirc-server-alist '((irc-server
-                            :channels irc-channel-list :user-name irc-user-name :password irc-password
-                            :encryption tls :port 6697 :nick irc-user-name)))
+(setq rcirc-server-alist `((,my-irc-server
+                            :channels ,irc-channel-list :user-name ,irc-user-name :password ,irc-password
+                            :encryption tls :port 6697 :nick ,irc-user-name)))
+
 (rcirc-track-minor-mode 1)

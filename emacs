@@ -1,3 +1,7 @@
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(package-initialize)
+
 (load-file "~/.emacs.d/personal_info.el")
 
 (setq gnus-select-method '(nnimap "gmail"
@@ -15,7 +19,7 @@
 (require 'cl)
 
 ;; not certain what's special about this package that it can't be required without extra work
-(load-file "~/.emacs.d/elpa/framemove-20130328.433/framemove.el")
+;;(load-file "~/.emacs.d/elpa/framemove-20130328.433/framemove.el")
 (require 'framemove)
 (global-set-key (kbd "C-c f") #'windmove-right)
 (global-set-key (kbd "C-c b") #'windmove-left)
@@ -31,9 +35,6 @@
 (setq framemove-hook-into-windmove t)
 
 (global-set-key (kbd "C-c r") #'gnus)
-
-(global-set-key (kbd "C-x C-f") #'find-file-in-repository)
-(global-set-key (kbd "C-x f") #'find-file)
 
 (global-set-key (kbd "C-c q") #'bury-buffer)
 
@@ -67,29 +68,38 @@
       (:connection-type . starttls)))))
  '(magit-commit-arguments nil)
  '(magit-diff-arguments (quote ("--ignore-space-change")))
+ '(magit-diff-section-arguments (quote ("--no-ext-diff")))
+ '(package-selected-packages
+   (quote
+    (weechat slack bbdb jabber helm ggtags framemove find-file-in-repository)))
  '(send-mail-function (quote smtpmail-send-it))
  '(smftpmail-smtp-service 587)
  '(smtpmail-smtp-server "smtp.gmail.com"))
 
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-(package-initialize)
 
 (add-hook 'shell-mode-hook #'compilation-shell-minor-mode)
 (column-number-mode)
 
+(require 'ggtags)
 (ggtags-mode)
 (global-set-key (kbd "C-.") #'ggtags-find-definition)
 (global-set-key (kbd "C-,") #'ggtags-find-reference)
 
+(require 'helm)
 (helm-mode)
+(global-set-key (kbd "M-x") #'helm-M-x)
+(global-set-key (kbd "C-x f") #'helm-find-files)
+
+(require 'find-file-in-repository)
+(global-set-key (kbd "C-x C-f") #'find-file-in-repository)
+;;(global-set-key (kbd "C-x f") #'find-file)
 
 (require 'magit)
 (global-set-key (kbd "C-c g") #'magit-status)
 
 ;; not certain what's special about this package that it can't be required without extra work
-(load-file "~/.emacs.d/elpa/magit-gerrit-20160111.1848/magit-gerrit.el")
-(require 'magit-gerrit)
+;;(load-file "~/.emacs.d/elpa/magit-gerrit-20160111.1848/magit-gerrit.el")
+;;(require 'magit-gerrit)
 ;;(setq-default show-trailing-whitespace t)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (setq magit-diff-refine-hunk #'all)
@@ -101,13 +111,23 @@
 (global-visual-line-mode 1)
 (setq visual-line-mode-qmap nil)
 
-(custom-set-faces
+;;(custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "DejaVu Sans Mono" :foundry "unknown" :slant normal :weight normal :height 100 :width normal))))
- '(font-lock-function-name-face ((t (:foreground "mediumspringgreen" :weight bold :height 1.0)))))
+;; '(default ((t (:family "DejaVu Sans Mono" :foundry "unknown" :slant normal ;;:weight normal :height 100 :width normal))))
+;; '(font-lock-function-name-face ((t (:foreground "mediumspringgreen" :weight ;;bold :height 1.0)))))
+
+;;(defun new-frame-setup (frame)
+;;  (if (display-graphic-p frame)
+;;    (progn
+;;      (set-face-attribute 'default nil :font "SFMono-11")
+;;      (setq-default line-spacing 0.15))))
+
+;;(mapc 'new-frame-setup (frame-list))
+
+;;(add-hook 'after-make-frame-functions 'new-frame-setup)
 
 (require 'xwidget)
 (defun xwidget-browse-url-no-reuse (url &optional session)
@@ -189,12 +209,13 @@
 
 (define-key xwidget-webkit-mode-map (kbd "RET") #'my-xwidget-webkit-insert-string)
 
-(setq rcirc-server-alist `((,my-irc-server
-                            :channels ,irc-channel-list :user-name ,irc-user-name :password ,irc-password
-                            :encryption tls :port 6697 :nick ,irc-user-name)))
+;(setq rcirc-server-alist `((,my-irc-server
+;                            :channels ,irc-channel-list :user-name ,irc-user-name :password ,irc-password
+;                            :encryption tls :port 6697 :nick ,irc-user-name)))
 
-(rcirc-track-minor-mode 1)
+(;rcirc-track-minor-mode 1)
 
-(rcirc)
+(;rcirc nil)
 
+(require 'jabber)
 (jabber-switch-to-roster-buffer)

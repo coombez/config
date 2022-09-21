@@ -2,25 +2,8 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
 
-(load-file "~/.emacs.d/personal_info.el")
-
-(setq gnus-select-method '(nnimap "gmail"
-				   (nnimap-address "imap.gmail.com")
-				   (nnimap-server-port 993)
-				   (nnimap-stream ssl)))
-
-;;(require 'bbdb)
-;;(load "bbdb-com" t)
-;;(bbdb-initialize 'gnus 'message)
-;;(bbdb-insinuate-message)
-;;(add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
-;;(setq bbdb/news-auto-create-p t)
-
 (require 'cl)
 
-;; not certain what's special about this package that it can't be required without extra work
-;;(load-file "~/.emacs.d/elpa/framemove-20130328.433/framemove.el")
-(require 'framemove)
 (global-set-key (kbd "C-c f") #'windmove-right)
 (global-set-key (kbd "C-c b") #'windmove-left)
 (global-set-key (kbd "C-c n") #'windmove-down)
@@ -33,8 +16,6 @@
 
 
 (setq framemove-hook-into-windmove t)
-
-(global-set-key (kbd "C-c r") #'gnus)
 
 (global-set-key (kbd "C-c q") #'bury-buffer)
 
@@ -61,29 +42,16 @@
  '(doc-view-continuous t)
  '(gnus-use-full-window nil)
  '(indent-tabs-mode nil)
- '(jabber-account-list
-   (\`
-    (((\, gmail-user-name)
-      (:network-server . "talk.google.com")
-      (:connection-type . starttls)))))
  '(magit-commit-arguments nil)
  '(magit-diff-arguments (quote ("--ignore-space-change")))
  '(magit-diff-section-arguments (quote ("--no-ext-diff")))
  '(package-selected-packages
    (quote
-    (weechat slack bbdb jabber helm ggtags framemove find-file-in-repository)))
- '(send-mail-function (quote smtpmail-send-it))
- '(smftpmail-smtp-service 587)
- '(smtpmail-smtp-server "smtp.gmail.com"))
+    (helm find-file-in-repository))))
 
 
 (add-hook 'shell-mode-hook #'compilation-shell-minor-mode)
 (column-number-mode)
-
-(require 'ggtags)
-(ggtags-mode)
-(global-set-key (kbd "C-.") #'ggtags-find-definition)
-(global-set-key (kbd "C-,") #'ggtags-find-reference)
 
 (require 'helm)
 (helm-mode)
@@ -97,10 +65,6 @@
 (require 'magit)
 (global-set-key (kbd "C-c g") #'magit-status)
 
-;; not certain what's special about this package that it can't be required without extra work
-;;(load-file "~/.emacs.d/elpa/magit-gerrit-20160111.1848/magit-gerrit.el")
-;;(require 'magit-gerrit)
-;;(setq-default show-trailing-whitespace t)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (setq magit-diff-refine-hunk #'all)
 
@@ -110,112 +74,3 @@
 
 (global-visual-line-mode 1)
 (setq visual-line-mode-qmap nil)
-
-;;(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
-;; '(default ((t (:family "DejaVu Sans Mono" :foundry "unknown" :slant normal ;;:weight normal :height 100 :width normal))))
-;; '(font-lock-function-name-face ((t (:foreground "mediumspringgreen" :weight ;;bold :height 1.0)))))
-
-;;(defun new-frame-setup (frame)
-;;  (if (display-graphic-p frame)
-;;    (progn
-;;      (set-face-attribute 'default nil :font "SFMono-11")
-;;      (setq-default line-spacing 0.15))))
-
-;;(mapc 'new-frame-setup (frame-list))
-
-;;(add-hook 'after-make-frame-functions 'new-frame-setup)
-
-(require 'xwidget)
-(defun xwidget-browse-url-no-reuse (url &optional session)
-    (interactive (progn
-        (require 'browse-url)
-        (browse-url-interactive-arg "URL: ")))
-    (xwidget-webkit-browse-url url t))
-
-(defun xwidget-browse-google () (interactive) (xwidget-browse-url-no-reuse "http://google.com"))
-
-(global-set-key (kbd "C-c w") #'xwidget-browse-url-no-reuse)
-(global-set-key (kbd "C-c C-w") #'xwidget-browse-google)
-(setq browse-url-browser-function (lambda (url session) (other-window 1) (xwidget-browse-url-no-reuse url)))
-
-(defun my-xwidget-webkit-scroll-up ()
-  "Scroll webkit up."
-  (interactive)
-  (xwidget-set-adjustment (xwidget-webkit-current-session) 'vertical t 50))
-
-(defun my-xwidget-webkit-scroll-down ()
-  "Scroll webkit down."
-  (interactive)
-  (xwidget-set-adjustment (xwidget-webkit-current-session) 'vertical t -50))
-
-(defun my-xwidget-webkit-scroll-forward ()
-  "Scroll webkit forwards."
-  (interactive)
-  (xwidget-set-adjustment (xwidget-webkit-current-session) 'horizontal t 50))
-
-(defun my-xwidget-webkit-scroll-backward ()
-  "Scroll webkit backwards."
-  (interactive)
-  (xwidget-set-adjustment (xwidget-webkit-current-session) 'horizontal t -50))
-
-(defun my-xwidget-webkit-jump-up ()
-  "Scroll webkit up."
-  (interactive)
-  (xwidget-set-adjustment (xwidget-webkit-current-session) 'vertical t 1950))
-
-(defun my-xwidget-webkit-jump-down ()
-  "Scroll webkit down."
-  (interactive)
-  (xwidget-set-adjustment (xwidget-webkit-current-session) 'vertical t -1950))
-
-(define-key xwidget-webkit-mode-map (kbd "C-n") #'my-xwidget-webkit-scroll-up)
-(define-key xwidget-webkit-mode-map (kbd "C-p") #'my-xwidget-webkit-scroll-down)
-(define-key xwidget-webkit-mode-map (kbd "C-f") #'my-xwidget-webkit-scroll-forward)
-(define-key xwidget-webkit-mode-map (kbd "C-b") #'my-xwidget-webkit-scroll-backward)
-(define-key xwidget-webkit-mode-map (kbd "C-v") #'my-xwidget-webkit-jump-up)
-(define-key xwidget-webkit-mode-map (kbd "M-v") #'my-xwidget-webkit-jump-down)
-
-(defun my-xwidget-webkit-insert-string (xw str)
-  "Insert string STR in the active field in the webkit XW."
-  ;; Read out the string in the field first and provide for edit.
-  (interactive
-   (let* ((xww (xwidget-webkit-current-session))
-
-          (field-value
-           (progn
-             (xwidget-webkit-execute-script xww xwidget-webkit-activeelement-js)
-             (xwidget-webkit-execute-script-rv
-              xww
-              "findactiveelement(document).value;")))
-          (field-type (xwidget-webkit-execute-script-rv
-                       xww
-                       "findactiveelement(document).type;")))
-     (list xww
-           (cond ((equal "text" field-type)
-                  (read-string "Text: " field-value))
-                 ((equal "password" field-type)
-                  (read-passwd "Password: " nil field-value))
-                 ((equal "textarea" field-type)
-                  (xwidget-webkit-begin-edit-textarea xww field-value))
-                 (t (read-string "Text: " field-value))))))
-
-  (xwidget-webkit-execute-script
-   xw
-   (format "findactiveelement(document).value='%s'" str)))
-
-(define-key xwidget-webkit-mode-map (kbd "RET") #'my-xwidget-webkit-insert-string)
-
-;(setq rcirc-server-alist `((,my-irc-server
-;                            :channels ,irc-channel-list :user-name ,irc-user-name :password ,irc-password
-;                            :encryption tls :port 6697 :nick ,irc-user-name)))
-
-(;rcirc-track-minor-mode 1)
-
-(;rcirc nil)
-
-(require 'jabber)
-(jabber-switch-to-roster-buffer)
